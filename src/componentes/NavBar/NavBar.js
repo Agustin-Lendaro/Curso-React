@@ -3,17 +3,19 @@ import CartWidget from "../CartWidget/CartWidget"
 const NavBar = () => {
     return(
         <nav>
-            <div>
-                <h1>Nerd 3d</h1>        
+            <div className="d-flex justify-content-around">
+                <h1>Nerd 3d</h1>
+                <div>
+                    <CartWidget />
+                 </div>
             </div>
+            
             <div className="d-flex justify-content-around">
                 <button>Llaveros</button>
                 <button>Muñecos</button>
                 <button>Otros</button>
             </div>
-            <div>
-                <CartWidget />
-            </div>
+            
         </nav>
     )
 }
