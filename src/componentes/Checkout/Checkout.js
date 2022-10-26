@@ -2,22 +2,24 @@ import { useState, useContext } from "react"
 import { CartContext } from "../../context/CartContext"
 import { db } from '../../services/firebase/firebase'
 import { addDoc, collection, getDocs, where, documentId, query, writeBatch} from "firebase/firestore"
+//import OrderForm from "../OrderForm/OrderForm"
 
 
 const Checkout = () => {
   const [loading, setLoading] = useState(false)
 
+  const [name, setName]= useState();
+  const [email, setEmail]= useState();
+  const [phone,setPhone] = useState();
+  const [orderId,setOrderId] = useState();
+  
   const { cart, total, clearCart } = useContext(CartContext)
 
   const createOrder = async () => {
       setLoading(true)
       try {
           const clientOrder = {
-              buyer: {
-                name: "Agustín Lendaro",
-                phone: "12431241254123",
-                email: "ejemplo@mail.com"
-              },
+              buyer: {name, email, phone},
               items: cart,
               total
           }
@@ -51,9 +53,10 @@ const Checkout = () => {
               await batch.commit()
   
               const orderRef = collection(db, 'orders')
-              const orderAdded = await addDoc(orderRef, clientOrder)
-  
+              const orderAdded = await addDoc(orderRef, clientOrder).then(({id}) => setOrderId(id));
+                
               console.log(`El id de su orden es: ${orderAdded.id}`)
+
               clearCart()
           } else {
               console.log('Hay productos fuera de stock')
@@ -72,8 +75,18 @@ const Checkout = () => {
   return (
       <>
           <h1>Checkout</h1>
-          <button onClick={createOrder}>Enviar pedido de compra</button>
-          
+          <div className='checkoutcontainer'>
+            {orderId ? (`Su pedido ha sido registrado. El ID de su compra es ${orderId}`):
+            (<div>
+              <h1>  Finish your Order  </h1>
+              <input type='text' placeholder='Ingrese su nombre' onChange={(e)=>setName(e.target.value)} /> <br/>
+              <input type='email'placeholder='Ingrese su correo electrónico' onChange={(e)=>setEmail(e.target.value)}/><br/>
+              <input type='tel' placeholder='Ingrese su teléfono'  onChange={(e)=>setPhone(e.target.value)}/><br/>
+              <button onClick={createOrder}>Send</button>
+            </div>
+          )}
+          </div>
+           
       </>
   )
 }
