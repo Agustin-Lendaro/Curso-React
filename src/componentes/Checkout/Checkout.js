@@ -12,7 +12,7 @@ const Checkout = () => {
   const createOrder = async () => {
       setLoading(true)
       try {
-          const objOrder = {
+          const clientOrder = {
               buyer: {
                 name: "Agustín Lendaro",
                 phone: "12431241254123",
@@ -22,7 +22,7 @@ const Checkout = () => {
               total
           }
   
-          console.log(objOrder)
+          console.log(clientOrder)
   
           const ids = cart.map(prod => prod.id)
           const productsRef = collection(db, 'products')
@@ -34,16 +34,16 @@ const Checkout = () => {
           const outOfStock = []
   
           docs.forEach(doc => {
-              const dataDoc = doc.data()
-              const stockDb = dataDoc.stock
+              const documentData = doc.data()
+              const databaseStock = documentData.stock
   
               const productAddedToCart = cart.find(prod => prod.id === doc.id)
               const prodQuantity = productAddedToCart?.quantity
   
-              if(stockDb >= prodQuantity) {
-                  batch.update(doc.ref, { stock: stockDb - prodQuantity })
+              if(databaseStock >= prodQuantity) {
+                  batch.update(doc.ref, { stock: databaseStock - prodQuantity })
               } else {
-                  outOfStock.push({ id: doc.id, ...dataDoc})
+                  outOfStock.push({ id: doc.id, ...documentData})
               }
           })
   
@@ -51,7 +51,7 @@ const Checkout = () => {
               await batch.commit()
   
               const orderRef = collection(db, 'orders')
-              const orderAdded = await addDoc(orderRef, objOrder)
+              const orderAdded = await addDoc(orderRef, clientOrder)
   
               console.log(`El id de su orden es: ${orderAdded.id}`)
               clearCart()
@@ -72,44 +72,10 @@ const Checkout = () => {
   return (
       <>
           <h1>Checkout</h1>
-          <button onClick={createOrder}>Agregar documento</button>
+          <button onClick={createOrder}>Enviar pedido de compra</button>
           
       </>
   )
 }
 
 export default Checkout
-
-// const Checkout = () => {
-
-//   const { cart, total } = useContext (CartContext)
- 
-//   const createOrder = () => {
-//     const order = {
-//       buyer:{
-//         name: "Agustín Lendaro",
-//         phone: "12431241254123",
-//         email: "ejemplo@mail.com"
-//       },
-//       items: cart,
-//       total
-//     }
-
-//     console.log(order);
-
-//     const collectionRef = collection (db, "orders")
-//     addDoc(collectionRef, order)
-
-//   }
-
-  
-
-//   return (
-//     <>
-//     <h1>Checkout</h1>
-//     <button onClick={createOrder}>Enviar pedido de compra</button>
-//     </>
-//   )
-// }
-
-// export default Checkout
