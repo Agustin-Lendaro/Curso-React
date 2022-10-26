@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { getProducts } from '../../asyncMock'
 import ItemList from '../ItemList/ItemList'
 import { useParams } from 'react-router-dom'
-import { getProductsByCategory } from '../../asyncMock'
+import { getDocs, collection, query, where } from "firebase/firestore"
+import { db } from '../../services/firebase/firebase'
+
 
 const ItemListContainer = ({ greeting }) => {
     const [products, setProducts] = useState([])
@@ -13,39 +14,33 @@ const ItemListContainer = ({ greeting }) => {
     console.log(categoryId)
 
     useEffect(() => {
-        if(!categoryId) {
-            getProducts().then(res => {
-                console.log(res)
-                setProducts(res)
-            }).catch(error => {
-                console.log(error)
-                setError(true)
-            }).finally(() => {
-                setLoading(false)
-            })
-        } else {
-            getProductsByCategory(categoryId).then(res => {
-                console.log(res)
-                setProducts(res)
-            }).catch(error => {
-                console.log(error)
-                setError(true)
-            }).finally(() => {
-                setLoading(false)
-            })
-        }
-    }, [categoryId])
+        setLoading(true)
 
+                            //ternario para ver si hay filtro, traer eso , si no hay, traer todo
+        const collectionRef = categoryId ? query(collection(db, "products"), where("category", "==", categoryId)) : collection(db, "products")
+
+        getDocs(collectionRef).then(response => {
+        
+            const productsAdapted = response.docs.map(doc => {
+                const data = doc.data()
+                return { id: doc.id, ...data}
+            })
+
+            setProducts(productsAdapted)
+        })
+        
+        .finally (() => {
+            setLoading(false)
+        })
+    }, [categoryId])
     
     if(loading) {
         return <h1>Cargando...</h1>
     }
     
-
     if(error) {
         return <h1>Hubo un error</h1>
     }
-
 
     return (
         <div className="ItemListContainer">
