@@ -4,7 +4,7 @@ import Item from "../Item/Item"
 
 const ItemList = ({ products }) => {
     return (
-        <div className='ListGroup'>
+        <div className="d-flex justify-content-around mx-1">
             {products.map(prod => <Item key={prod.id} {...prod} />)}
          </div>   
         // <ul style={{display: 'flex', flexDirection: 'column'}}>
