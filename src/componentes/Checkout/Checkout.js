@@ -8,6 +8,7 @@ import createOrder from "../../services/OrderService"
 const Checkout = () => {
   const [loading, setLoading] = useState(false)
   const { cart, total, clearCart } = useContext(CartContext)
+  const [orderId, setOrderId] = useState()
 
   const [clientOrder, setClientOrder] = useState({
     name:"",
@@ -22,7 +23,7 @@ const Checkout = () => {
     try {
       const response = await createOrder(clientOrder, cart, total, clearCart);
       if (!response.error) {
-        console.log(response.data.id)
+        setOrderId(response.data)
       }else{
         console.log(response.error.message)
       }
@@ -42,7 +43,7 @@ const Checkout = () => {
       <>
           <h1>Checkout</h1>
           <div >
-            {clientOrder.orderId ? (`Su pedido ha sido registrado. El ID de su compra es ${clientOrder.orderId}`):
+            {orderId ? (`Su pedido ha sido registrado. El ID de su compra es ${orderId}`):
             (<div className="d-flex flex-column justify-content-around">
               <h1>  Ingrese sus datos para finalizar la compra  </h1>
               <input type='text' placeholder='Ingrese su nombre' onChange={(e)=> {
