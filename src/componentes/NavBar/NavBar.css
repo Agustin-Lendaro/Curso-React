@@ -11,3 +11,8 @@
 .background{
     background-image: url(./assets/header.jpg)
 }
+
+.Option{
+    font-size: 40px;
+    color: black
+}
