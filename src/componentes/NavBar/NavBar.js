@@ -1,11 +1,16 @@
+import "./NavBar.css"
 import CartWidget from "../CartWidget/CartWidget"
 import { Link } from "react-router-dom"
+import Logo from "./assets/3d-nerd-logo.jpg"
 
 const NavBar = () => {
     return(
         <nav>
-            <div className="d-flex justify-content-around">
-            <Link to = '/'><h1>Nerd 3d</h1> </Link>
+            <div className="d-flex justify-content-around background">
+            <Link to = '/' className="d-flex justify-content-around ">
+                <img src={Logo} alt="Logo de la empresa" className="logoEmpresa" />
+                <h1>Nerd 3D</h1> 
+            </Link>
                 <div>
                     <CartWidget />
                  </div>

@@ -1,4 +1,4 @@
-//import './ItemDetail.css'
+import "./ItemDetail.css"
 import { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import ItemCounter from '../ItemCounter/ItemCounter'
@@ -27,18 +27,12 @@ const ItemDetail = ({ id, name, img, category, description, price, stock }) => {
                 </h2>
             </header>
             <picture>
-                <img src={img} alt={name} className="img-thumbnail img-fluid" />
+                <img src={img} alt={name} className="img-thumbnail img-fluid CardImg" />
             </picture>
             <section>
-                <p>
-                    Categoria: {category}
-                </p>
-                <p>
-                    Descripción: {description}
-                </p>
-                <p>
-                    Precio: {price}
-                </p>
+                <p>Categoria: {category}</p>
+                <p>Descripción: {description}</p>
+                <p>Precio: {price}</p>
             </section>           
             <footer>
                 {

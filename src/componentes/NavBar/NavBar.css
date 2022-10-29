@@ -1,0 +1,13 @@
+.logoEmpresa{
+    min-width: 75px;
+    min-height: 75px;
+    max-width: 8vw;
+    max-height: 8vw;
+    object-fit: contain;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.background{
+    background-image: url(./assets/header.jpg)
+}
