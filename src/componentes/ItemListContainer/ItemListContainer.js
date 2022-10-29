@@ -7,7 +7,7 @@ import { db } from '../../services/firebase/firebase'
 
 const ItemListContainer = ({ greeting }) => {
     const [products, setProducts] = useState([])
-    const [error, setError] = useState(false)
+    
     const [loading, setLoading] = useState(true)
 
     const { categoryId } = useParams()
@@ -38,9 +38,7 @@ const ItemListContainer = ({ greeting }) => {
         return <h1>Cargando...</h1>
     }
     
-    if(error) {
-        return <h1>Hubo un error</h1>
-    }
+    
 
     return (
         <div>
